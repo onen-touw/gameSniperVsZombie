@@ -78,16 +78,7 @@ public:
 	std::vector<SDL_Rect>getRootBtnsCoords() { return this->rootBtnCoords; }
 
 	void changeHardnesSetting(int i) {
-		if (i == 0)
-		{
-			this->tempHardnesSetting = settingGGame::hardnes;
-
-		}
-		else
-		{
-			this->tempHardnesSetting = i;
-
-		}
+		this->tempHardnesSetting = i;
 		std::cout << this->tempHardnesSetting << "\n";
 	}
 
@@ -95,8 +86,6 @@ public:
 		for (int i = 0; i < settingBtnCoords.size(); i++)
 		{
 			SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::yellowSwitch], NULL, settingGGame::Surface, &settingSwitchCoords[i]);
-			std::cout << "qqqqqqq\n";
-
 		}
 		SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::redSwitch], NULL, settingGGame::Surface, &settingSwitchCoords[i]);
 	}
@@ -175,6 +164,17 @@ public:
 		this->killCounter++;
 	}
 
+	void blitBestResult(int result) {
+		std::string resStr = std::to_string(result);
+		for (int i = 0; i < resStr.size(); i++)
+		{
+			SDL_Rect mr = { 200 + i * 30, settingGGame::menuSetting.menuPaddingTop , 30, 40 };
+			SDL_Rect cr = { 171 * (resStr[i] - '0'), 0 , 171, 300 };
+			SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::numbers], &cr, settingGGame::Surface, &mr);
+		}
+	}
+
+	int getKillCount() { return this->killCounter; }
 	void resetKillCounter() { this->killCounter = 0; this->killSCounter = "000"; }
 
 	void blitKillCounter() {

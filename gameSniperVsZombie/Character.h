@@ -31,7 +31,11 @@ public:
 	}
 	void characterResetPositon() {
 		this->characterY = settingGGame::charctData.characterY;
+		this->line = settingGGame::charctData.startCharacterLine;
 
+	}
+	void clearBullets() {
+		this->bulletV.clear();
 	}
 
 	///return false if HP = 0

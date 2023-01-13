@@ -6,11 +6,12 @@
 #include"menuClass.h"
 #include "imagesClass.h"
 #include"zombieClass.h"
-
+#include"saveClass.h"
 
 class gameplayClass
 {
 private:
+	saveClass save;
 	baseGameClass bcTest;
 	fieldClass fTest;
 	menuClass menu;
@@ -69,7 +70,7 @@ public:
 					this->zombieV.erase(this->zombieV.begin() + i);
 					characterTest.decreaseHP();
 					menu.blitHP(characterTest.getHP());
-					i--;
+					break;
 				}
 				else
 				{
@@ -85,6 +86,7 @@ public:
 				{
 					for (int j = 0; j < bulletV.size(); j++)
 					{
+
   						if (!this->zombieV[i].zombieAction(bulletV[j].getLine(), bulletV[j].getPosX())) {
 							this->zombieV.erase(this->zombieV.begin() + i);
 							menu.increaseKillCounter();
@@ -98,16 +100,18 @@ public:
 	}
 
 	void generateGame() {
+		this->zombieV.clear();
 		bcTest.rebuildWin();
-
+		
 		menu.resetKillCounter();
 		menu.blitMenuHeaderFunctional();
-
+		menu.blitBestResult(save.getResult());
 
 		fTest.blitField();
 		fTest.blitBackTown();
 		fTest.blitZombieTown();
 
+		characterTest.clearBullets();
 		characterTest.characterResetPositon();
 		characterTest.blitCharacter();
 		characterTest.setHP();
@@ -117,6 +121,7 @@ public:
 
 		this->firstStep = false;
 		this->gameResult = false;
+		this->tickCounter = 0;
 	}
 
 	
@@ -147,29 +152,21 @@ public:
 						{
 						case settingGGame::menuSetting.menuPuncts::settingsBtn:
 							menu.blitWinSettings(false);
-							//menu.blitSettings();
 							std::cout << "blitSettings\n";
-
-
 							SDL_UpdateWindowSurface(settingGGame::win);
 
 							break;
 						case settingGGame::menuSetting.menuPuncts::about:
 							menu.blitWinAbout(false);
-
-							//menu.blitAbout();
-
 							std::cout << "blitAbout\n";
 							SDL_UpdateWindowSurface(settingGGame::win);
 
 							break;
 						case settingGGame::menuSetting.menuPuncts::quitBtn:
-							//quit
 							std::cout << "quit\n";
 							return 0;
 							break;
 						case settingGGame::menuSetting.menuPuncts::cancelBtn:
-							//closeMenu
 							menu.blitWinMenu(true);
 							menu.blitWinAbout(true);
 							menu.blitWinSettings(true);
@@ -237,9 +234,6 @@ public:
 								menu.setNewHardnessSetting();
 								this->generateGame();
 
-								/*fTest.blitField();
-								characterTest.blitCharacter(fTest.getFiledVector());*/
-
 								SDL_UpdateWindowSurface(settingGGame::win);
 								break;
 							case settingGGame::menuSetting.rootBtn::cancel:
@@ -287,13 +281,13 @@ public:
 
 
 
-				if (event.type == SDL_QUIT)//отслеживание закрытия окна через кнопку "Крест"
+				if (event.type == SDL_QUIT) 
 				{
 					game = false;
 				}
 
-
-				if (characterTest.getHP() && !menu.getMenuFlag())
+				///Gameplay==========start================================================
+				if (characterTest.getHP() && !menu.getMenuFlag() && !this->gameResult)
 				{
 					if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_DOWN)
 					{
@@ -312,7 +306,7 @@ public:
 					}
 					if (this->firstStep)
 					{
-						if (++this->tickCounter == 60 / (settingGGame::hardnes +1 )) {
+						if (++this->tickCounter == 60 / (settingGGame::hardnes + 1 )) {
 							this->tickCounter = 0;
 							int line = rand() % settingGGame::gSizes.countLine;
 							std::cout << line << "<line\n";
@@ -324,13 +318,24 @@ public:
 
 					fTest.blitField();
 					characterTest.blitCharacter();
+
 					characterTest.bulletAction();
 					this->zombieMotion(characterTest.getBulletV());
 
 
 					SDL_UpdateWindowSurface(settingGGame::win);
 				}
-				
+				else if (!characterTest.getHP())
+				{
+					this->gameResult = true;
+					save.saveResult(menu.getKillCount());
+					save.getResultFromSave();
+					menu.blitBestResult(save.getResult());
+					SDL_UpdateWindowSurface(settingGGame::win);
+					///TODO:: save kill record
+				}
+				///Gameplay==========end==================================================
+
 				SDL_Delay(1000 / 60);
 			}
 		}

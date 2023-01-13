@@ -140,6 +140,7 @@
     <ClCompile Include="imagesClass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menuClass.cpp" />
+    <ClCompile Include="saveClass.cpp" />
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="zombieClass.cpp" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="gameplayClass.h" />
     <ClInclude Include="imagesClass.h" />
     <ClInclude Include="menuClass.h" />
+    <ClInclude Include="saveClass.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="zombieClass.h" />
   </ItemGroup>
