@@ -132,23 +132,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\g2\g2\imagesClass.cpp" />
     <ClCompile Include="baseGameClass.cpp" />
     <ClCompile Include="bulletClass.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="fieldClass.cpp" />
     <ClCompile Include="gameplayClass.cpp" />
+    <ClCompile Include="imagesClass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menuClass.cpp" />
     <ClCompile Include="settings.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\g2\g2\imagesClass.h" />
     <ClInclude Include="baseGameClass.h" />
     <ClInclude Include="bulletClass.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="fieldClass.h" />
     <ClInclude Include="gameplayClass.h" />
+    <ClInclude Include="imagesClass.h" />
     <ClInclude Include="menuClass.h" />
     <ClInclude Include="settings.h" />
   </ItemGroup>
