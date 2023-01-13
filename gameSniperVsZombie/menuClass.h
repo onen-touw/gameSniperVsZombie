@@ -13,9 +13,9 @@ private:
 	bool menuFlag = false;
 	int menu2Lvl = 0;
 
-	unsigned stepCount = 0;
-	std::string stepSCount = "000";
-	std::string stepSTemp;
+	unsigned killCounter = 0;
+	std::string killSCounter = "000";
+	std::string killSTemp;
 
 	std::vector<SDL_Rect> menuBtnCoords;
 
@@ -95,6 +95,7 @@ public:
 		for (int i = 0; i < settingBtnCoords.size(); i++)
 		{
 			SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::yellowSwitch], NULL, settingGGame::Surface, &settingSwitchCoords[i]);
+			std::cout << "qqqqqqq\n";
 
 		}
 		SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::redSwitch], NULL, settingGGame::Surface, &settingSwitchCoords[i]);
@@ -134,8 +135,6 @@ public:
 		else menuFlag = true;
 	}
 
-
-
 	bool checkOpenBtn(int x, int y) {
 		if (x >= settingGGame::menuSetting.menuOpenBtnCoords.x &&
 			x <= settingGGame::menuSetting.menuOpenBtnCoords.x + settingGGame::menuSetting.menuOpenBtnCoords.w &&
@@ -172,32 +171,34 @@ public:
 		};
 	}
 
-	void increaseStepCount() {
-		this->stepCount++;
+	void increaseKillCounter() {
+		this->killCounter++;
 	}
 
-	void blitStepCounter() {
+	void resetKillCounter() { this->killCounter = 0; this->killSCounter = "000"; }
 
-		stepSTemp = std::to_string(stepCount);
+	void blitKillCounter() {
 
-		if (stepSTemp.size() == 1)
+		killSTemp = std::to_string(this->killCounter);
+
+		if (killSTemp.size() == 1)
 		{
-			stepSCount[2] = stepSTemp[0];
+			killSCounter[2] = killSTemp[0];
 		}
-		else if (stepSTemp.size() == 2)
+		else if (killSTemp.size() == 2)
 		{
 
-			stepSCount[1] = stepSTemp[0];
-			stepSCount[2] = stepSTemp[1];
+			killSCounter[1] = killSTemp[0];
+			killSCounter[2] = killSTemp[1];
 		}
 		else {
-			stepSCount = stepSTemp;
+			killSCounter = killSTemp;
 		}
 
-		for (int i = 0; i < stepSCount.size(); i++)
+		for (int i = 0; i < killSCounter.size(); i++)
 		{
 			SDL_Rect mr = { 500 + i * 30, settingGGame::menuSetting.menuPaddingTop , 30, 40 };
-			SDL_Rect cr = { 171 * (stepSCount[i] - '0'), 0 , 171, 300 };
+			SDL_Rect cr = { 171 * (killSCounter[i] - '0'), 0 , 171, 300 };
 			SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::numbers], &cr, settingGGame::Surface, &mr);
 
 		}
@@ -207,7 +208,7 @@ public:
 	void blitMenuHeaderFunctional() {
 		blitHeader();
 		blitHP(settingGGame::charctData.healthPoint);
-		blitStepCounter();
+		blitKillCounter();
 	}
 
 	void blitMenuBG() {
@@ -265,6 +266,7 @@ public:
 		std::cout << v << " vvv\n";
 		if (v == 0 && !update)
 		{
+			std::cout << "setttttttttttt\n";
 			menu2Lvl = settingGGame::menuSetting.menu2lvlPuncts::settingsP;
 			blitMenuBG();
 
@@ -276,13 +278,13 @@ public:
 				};
 				SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::menuSettingsBtns],
 					&cr, settingGGame::Surface, &settingBtnCoords[i]);
-
-				//SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::yellowSwitch], NULL, settingGGame::Surface, &settingSwitchCoords[i]);
 			}
+			std::cout << "setttttttttttt\n";
 
 			this->blitRedSwich(this->tempHardnesSetting);
 			blitRootBtn(settingGGame::menuSetting.rootBtn::accept);
 			blitRootBtn(settingGGame::menuSetting.rootBtn::cancel);
+			std::cout << "setttttttttttt\n";
 			std::cout << "settings\n";
 			v++;
 		}

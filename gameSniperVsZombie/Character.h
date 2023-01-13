@@ -9,6 +9,7 @@ class Character : public imagesClass
 private:
 	int characterY = 0;
 	int characterX = 0;
+	int line = 0;
 	std::vector<bulletClass> bulletV;
 	unsigned healthPoint = 0;
 public:
@@ -16,8 +17,8 @@ public:
 	Character() {
 		this->setHP();
 		this->characterX = settingGGame::charctData.characterX;
-		this->characterY = settingGGame::charctData.characterY;
-		
+		this->line = settingGGame::charctData.startCharacterLine;
+		this->characterResetPositon();
 	}
 	~Character()
 	{
@@ -28,7 +29,10 @@ public:
 		this->healthPoint = settingGGame::charctData.healthPoint;
 
 	}
+	void characterResetPositon() {
+		this->characterY = settingGGame::charctData.characterY;
 
+	}
 
 	///return false if HP = 0
 	bool decreaseHP() {
@@ -40,14 +44,10 @@ public:
 		return true;
 
 	}
-	void increaseHP() {
-		if (this->healthPoint < 2)
-		{
-			this->healthPoint++;
-		}
-	}
 
 	unsigned getHP() { return this->healthPoint; }
+
+	std::vector<bulletClass>getBulletV() { return this->bulletV; }
 
 
 	void blitCharacter() {
@@ -62,6 +62,7 @@ public:
 			if (this->characterY > settingGGame::gSizes.menuHeaderHeight)
 			{
 				this->characterY -= settingGGame::gSizes.lineHeight;
+				this->line--;
 			}
 			else
 			{
@@ -73,6 +74,7 @@ public:
 			if (this->characterY < settingGGame::gSizes.winHEIGHT - settingGGame::gSizes.lineHeight)
 			{
 				this->characterY += settingGGame::gSizes.lineHeight;
+				this->line++;
 			}
 			else
 			{
@@ -84,9 +86,9 @@ public:
 		}
 	}
 	void shot() {
-		bulletClass bk(this->characterX, this->characterY);
+		bulletClass bk(this->characterX, this->characterY, this->line);
 		this->bulletV.push_back(bk);
-		std::cout << bulletV.size()<<"\n";
+		std::cout << bulletV.size() << "<bullets" << "\n";
 	}
 	void bulletAction() {
 		if (this->bulletV.size() > 0)
@@ -96,6 +98,7 @@ public:
 				if (!bulletV[i].bulletTransmit())
 				{
 					bulletV.erase(bulletV.begin());
+					i--;
 					std::cout << " delete \n";
 				}
 				else

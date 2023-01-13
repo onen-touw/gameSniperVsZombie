@@ -31,6 +31,19 @@ struct gameSizes
 
 };
 
+struct zombieParams
+{
+	int hp = 1;
+	int speed = 5;
+
+	enum img
+	{
+		zombie,
+
+		imgTOTAL
+	};
+};
+
 enum directions {
 	up,
 	down
@@ -61,7 +74,7 @@ struct CharacterValues
 
 enum hardnesSettingsEnum
 {
-	easy,
+	easy = 0,
 	normal,
 	hard
 };
@@ -127,5 +140,6 @@ namespace settingGGame {
 	extern CharacterValues charctData;
 	extern menuSettings menuSetting;
 	extern int hardnes;
+	extern zombieParams zombieParam;
 	//extern std::string path
 }

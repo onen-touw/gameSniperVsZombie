@@ -4,6 +4,8 @@
 #include"fieldClass.h"
 #include"Character.h"
 #include"menuClass.h"
+#include "imagesClass.h"
+#include"zombieClass.h"
 
 
 class gameplayClass
@@ -13,6 +15,9 @@ private:
 	fieldClass fTest;
 	menuClass menu;
 	Character characterTest;
+	imagesClass zombieImage;
+
+	std::vector<zombieClass>zombieV;
 
 	bool game = true;
 	bool firstStep = false;
@@ -21,16 +26,17 @@ private:
 
 	int cursor_X = 0, cursor_Y = 0;
 
+	int tickCounter = 0;
+
 public:
 	gameplayClass() {
-		//bcTest.initModuls();
 		fTest.setImgVectSize(gameImages::gameImgTOTAL);
 		fTest.loadImg("./images/gameImages/backTown.png", gameImages::backTown);
 		fTest.loadImg("./images/gameImages/zombieTown.png", gameImages::zombieTown);
 		fTest.loadImg("./images/gameImages/line.png", gameImages::cellLine);
-		//fTest.loadImg("./images/gameImages/justCell.png", gameImages::backTown);
 
-
+		zombieImage.setImgVectSize(settingGGame::zombieParam.img::imgTOTAL);
+		zombieImage.loadImg("./images/gameImages/zombie.png", settingGGame::zombieParam.img::zombie);
 
 		menu.setImgVectSize(settingGGame::menuSetting.menuImg::imgMenuTOTAL);
 		menu.loadImg("./images/menuImges/pinkMenuBG.png", settingGGame::menuSetting.menuImg::headerAndBG);
@@ -50,14 +56,51 @@ public:
 	}
 	~gameplayClass()
 	{
+		zombieV.clear();
+	}
 
+	void zombieMotion(std::vector<bulletClass> bulletV) {
+		if (this->zombieV.size()>0)
+		{
+			for (int i = 0; i < this->zombieV.size(); i++)
+			{
+				if (!this->zombieV[i].zombieTransmit())
+				{
+					this->zombieV.erase(this->zombieV.begin() + i);
+					characterTest.decreaseHP();
+					menu.blitHP(characterTest.getHP());
+					i--;
+				}
+				else
+				{
+					this->zombieV[i].blitZombie(zombieImage.getImage(settingGGame::zombieParam.img::zombie));
+				}
+			}
+		}
+		if (this->zombieV.size() > 0)
+		{
+			for (int i = 0; i < this->zombieV.size(); i++)
+			{
+				if (bulletV.size() > 0)
+				{
+					for (int j = 0; j < bulletV.size(); j++)
+					{
+  						if (!this->zombieV[i].zombieAction(bulletV[j].getLine(), bulletV[j].getPosX())) {
+							this->zombieV.erase(this->zombieV.begin() + i);
+							menu.increaseKillCounter();
+							menu.blitKillCounter();
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	void generateGame() {
 		bcTest.rebuildWin();
-		//fTest.clearField();
 
-		//menu.resetTimerAndCounter();
+		menu.resetKillCounter();
 		menu.blitMenuHeaderFunctional();
 
 
@@ -65,7 +108,7 @@ public:
 		fTest.blitBackTown();
 		fTest.blitZombieTown();
 
-		//characterTest.characterResetPositon();
+		characterTest.characterResetPositon();
 		characterTest.blitCharacter();
 		characterTest.setHP();
 
@@ -79,21 +122,13 @@ public:
 	
 	int startGame() {
 		SDL_Event event;
-		generateGame();
+		this->generateGame();
+		srand(time(0));
+
 		while (game) {
 
 			while (SDL_PollEvent(&event) || game)
 			{
-				if (!gameResult)
-				{
-					/*menu.gTimer();
-					menu.blitGTime();*/
-				}
-				else
-				{
-					/// TODO: reset timer
-				}
-
 
 				if (event.button.button == SDL_BUTTON_LEFT && event.type == SDL_MOUSEBUTTONUP)
 				{
@@ -262,25 +297,40 @@ public:
 				{
 					if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_DOWN)
 					{
+						if (!this->firstStep) { firstStep = true; }
 						characterTest.transmit(directions::down);
 					}
 					else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_UP)
 					{
+						if (!this->firstStep) { firstStep = true; }
 						characterTest.transmit(directions::up);
 					}
 					else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 					{
+						if (!this->firstStep) { firstStep = true; }
 						characterTest.shot();
 					}
+					if (this->firstStep)
+					{
+						if (++this->tickCounter == 60 / (settingGGame::hardnes +1 )) {
+							this->tickCounter = 0;
+							int line = rand() % settingGGame::gSizes.countLine;
+							std::cout << line << "<line\n";
+							zombieClass z(line);
+							this->zombieV.push_back(z);
+							std::cout << this->zombieV.size() << "<zCount\n";
+						}
+					}
+
+					fTest.blitField();
+					characterTest.blitCharacter();
+					characterTest.bulletAction();
+					this->zombieMotion(characterTest.getBulletV());
+
+
+					SDL_UpdateWindowSurface(settingGGame::win);
 				}
-				fTest.blitField();
-				characterTest.blitCharacter();
-				characterTest.bulletAction();
 				
-
-				SDL_UpdateWindowSurface(settingGGame::win);
-
-
 				SDL_Delay(1000 / 60);
 			}
 		}

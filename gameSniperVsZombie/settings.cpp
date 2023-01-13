@@ -8,5 +8,7 @@ namespace settingGGame {
 
 	CharacterValues charctData;
 	menuSettings menuSetting;
-	int hardnes = hardnesSettingsEnum::easy;
+	int hardnes = hardnesSettingsEnum::hard ;
+
+	zombieParams zombieParam;
 }

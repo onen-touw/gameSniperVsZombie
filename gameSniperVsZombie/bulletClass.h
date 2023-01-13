@@ -8,19 +8,20 @@ private:
 	int posY = 0;
 	int posX = 0;
 	int speed = 0;
+	int line = 0;
+
 public:
-	bulletClass(int characterX, int characterY) {
+	bulletClass(int characterX, int characterY, int line) {
 		this->posX = characterX;
 		this->posY = characterY;
 		this->speed = settingGGame::charctData.bulletSpeed;
-
+		this->line = line;
 	}
 
 	bool bulletTransmit() {
 		if (this->posX< settingGGame::gSizes.winWIDTH - settingGGame::gSizes.zombiTownWidth - settingGGame::charctData.bulletSize*2)
 		{
 			this->posX += this->speed;
-			//std::cout << this->posX << "\n";
 			return true;
 		}
 		else
@@ -28,6 +29,9 @@ public:
 			return false;
 		}
 	}
+
+	int getPosX() { return this->posX; }
+	int getLine() { return this->line; }
 
 	~bulletClass()
 	{

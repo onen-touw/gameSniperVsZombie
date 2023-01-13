@@ -36,5 +36,9 @@ public:
 		images.clear();
 	}
 
+	SDL_Surface* getImage(int i) {
+		return this->images[i];
+	}
+
 };
 

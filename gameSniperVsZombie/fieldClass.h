@@ -7,7 +7,7 @@ class fieldClass :
     public imagesClass/*, public baseGameClass*/
 {
 protected:
-    //std::vector<SDL_Surface*>fieldV;
+
 public:
     ~fieldClass()
     {
