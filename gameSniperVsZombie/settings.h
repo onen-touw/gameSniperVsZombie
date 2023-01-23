@@ -98,6 +98,8 @@ struct menuSettings
 		redSwitch,
 		yellowSwitch,
 		rootBtn,
+		aboutIm,
+		endScreen,
 
 		imgMenuTOTAL
 	};

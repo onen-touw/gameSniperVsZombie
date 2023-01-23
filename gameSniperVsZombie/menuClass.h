@@ -307,7 +307,13 @@ public:
 		{
 			menu2Lvl = settingGGame::menuSetting.menu2lvlPuncts::aboutP;
 
-			blitMenuBG();
+			SDL_Rect mr = { settingGGame::gSizes.winWIDTH / 2 - settingGGame::gSizes.winWIDTH / 4,
+				settingGGame::menuSetting.menuPaddingTop + settingGGame::gSizes.menuHeaderHeight,
+				settingGGame::gSizes.winWIDTH / 2,
+				settingGGame::gSizes.winHEIGHT - settingGGame::gSizes.menuHeaderHeight - 2 * settingGGame::menuSetting.menuPaddingTop
+			};
+			SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::aboutIm],
+				NULL, settingGGame::Surface, &mr);
 			blitRootBtn(settingGGame::menuSetting.rootBtn::cancel);
 			std::cout << "About\n";
 			v++;
@@ -323,6 +329,14 @@ public:
 		}
 	}
 
-
+	void blitEndScreen() {
+		SDL_Rect mr = { settingGGame::gSizes.winWIDTH / 2 - settingGGame::gSizes.winWIDTH / 4,
+				settingGGame::gSizes.winHEIGHT - 50,
+				settingGGame::gSizes.winWIDTH / 2,
+				50
+		};
+		SDL_BlitScaled(images[settingGGame::menuSetting.menuImg::endScreen],
+			NULL, settingGGame::Surface, &mr);
+	}
 };
 

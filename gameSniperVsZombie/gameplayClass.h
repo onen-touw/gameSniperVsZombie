@@ -49,6 +49,8 @@ public:
 		menu.loadImg("./images/menuImges/menuBtns.png", settingGGame::menuSetting.menuImg::menuFirstLvlBtns);
 		menu.loadImg("./images/menuImges/settingBtns.png", settingGGame::menuSetting.menuImg::menuSettingsBtns);
 		menu.loadImg("./images/menuImges/AcBtn.png", settingGGame::menuSetting.menuImg::rootBtn);
+		menu.loadImg("./images/menuImges/about.png", settingGGame::menuSetting.menuImg::aboutIm);
+		menu.loadImg("./images/menuImges/endScr.png", settingGGame::menuSetting.menuImg::endScreen);
 
 		characterTest.setImgVectSize(settingGGame::charctData.img::imgCount);
 		characterTest.loadImg("./images/gameImages/character.png", settingGGame::charctData.img::character);
@@ -332,6 +334,7 @@ public:
 					save.getResultFromSave();
 					menu.blitBestResult(save.getResult());
 					SDL_UpdateWindowSurface(settingGGame::win);
+					menu.blitEndScreen();
 					///TODO:: save kill record
 				}
 				///Gameplay==========end==================================================
